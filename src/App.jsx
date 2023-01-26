@@ -1,8 +1,8 @@
-import './styles.scss';
+import { useState } from "react";
+import "./styles.scss";
 
 /*
   DESAFIO TÉCNICO - JOGO DA VELHA 
-
   * descrição
     desenvolva um jogo da velha (tic tac toe) funcional.
     use qualquer técnica de estilização preferida: css modules, sass, styled.
@@ -16,11 +16,24 @@ import './styles.scss';
 */
 
 function App() {
+  const [gameData, setGameData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  const handleClick = (clickedIndex) => {
+    console.log('index:',clickedIndex);
+  };
+
   return (
     <>
-      <h3>Desafio</h3>
-      <h1>jogo da velha</h1>
-      <div className='board-game'></div>
+      <div className="board-game">
+        {gameData.map((value, index) => (
+          <span 
+          onClick={() => { 
+            handleClick(index); 
+          }}>
+            {value}
+          </span>
+        ))}
+      </div>
     </>
   );
 }
