@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import "./styles.scss";
 
@@ -15,22 +16,90 @@ import "./styles.scss";
     ? - fazer um risco na sequência vencedora, caso houver
 */
 
+const winningCombinations = [
+  //horizontais
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+
+  // verticais
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+
+  // diagonal
+  [0, 4, 8],
+  [2, 4, 6],
+];
+
 function App() {
   const [gameData, setGameData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [turn, setTurn] = useState(1);
 
   const handleClick = (clickedIndex) => {
-    console.log('index:',clickedIndex);
+    console.log(clickedIndex);
+
+    if (gameData[clickedIndex] !== 0) {
+      return;
+    }
+
+    setGameData((prev) => {
+      const newGameData = [...prev];
+      newGameData[clickedIndex] = turn;
+      return newGameData;
+    });
+
+    setTurn((prev) => (prev == 1 ? 2 : 1));
+
+    
+  };
+
+  useEffect(()=>{
+    checkWinner();
+  },[gameData]);
+
+  const checkWinner = () => {
+    console.log('checando ganhador!');
+    
+    let winner = null;
+
+    for(let values of winningCombinations){
+
+      if(
+        gameData[values[0]] === 1 && 
+        gameData[values[1]] === 1 && 
+        gameData[values[2]] === 1 
+        ){
+          winner = 'player1'
+        }
+
+      if(
+        gameData[values[0]] === 2 && 
+        gameData[values[1]] === 2 && 
+        gameData[values[2]] === 2 
+        ){
+          winner = 'player2'
+        }
+    }
+
+    console.log({winner});
+
   };
 
   return (
     <>
       <div className="board-game">
         {gameData.map((value, index) => (
-          <span 
-          onClick={() => { 
-            handleClick(index); 
-          }}>
-            {value}
+          <span
+            onClick={() => {
+              handleClick(index);
+            }}
+            key={index}
+          >
+            <abbr title="">{index}</abbr>
+            {value == 1 && "❌"}
+            {value == 2 && "⭕"}
+            {value == 0 && "❓"}
           </span>
         ))}
       </div>

@@ -27,10 +27,19 @@ body {
     justify-content: center;
     color: #333;
     font-size: 30px;
+    position: relative;
+    outline: 1px solid #ccc;
 
     &:hover {
       background: #f6f6f6;
       cursor: pointer;
+    }
+    abbr {
+      font-size: 20px;
+      color: rgba(0,0,0,0.5);
+      position: absolute;
+      top: 10px;
+      left: 10px;
     }
   }
 }
