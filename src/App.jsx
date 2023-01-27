@@ -35,11 +35,15 @@ const winningCombinations = [
 function App() {
   const [gameData, setGameData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [turn, setTurn] = useState(1);
+  const [winningCombo, setWinningCombo] = useState(null);
 
   const handleClick = (clickedIndex) => {
     console.log(clickedIndex);
 
     if (gameData[clickedIndex] !== 0) {
+      return;
+    }
+    if(winningCombo){
       return;
     }
 
@@ -56,7 +60,20 @@ function App() {
 
   useEffect(()=>{
     checkWinner();
+    checkGameEnd();
   },[gameData]);
+
+  useEffect(()=>{
+    if(winningCombo){
+      alert('Jogo teve um vencedor.')
+    }
+  },[winningCombo])
+
+  const checkGameEnd = () => {
+    if(gameData.every((item) => item !==0)){
+      alert('jogo acabou, deu velha.');
+    }
+  }
 
   const checkWinner = () => {
     console.log('checando ganhador!');
@@ -79,6 +96,10 @@ function App() {
         gameData[values[2]] === 2 
         ){
           winner = 'player2'
+        }
+        if (winner){
+          setWinningCombo(values);
+          break;
         }
     }
 
