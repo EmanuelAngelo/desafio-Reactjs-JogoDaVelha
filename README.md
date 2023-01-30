@@ -18,5 +18,8 @@ Preste bem atenção às instruções dentro do arquivo App.jsx e bora codar!
 Esse repositório já um projeto vite iniciado com sass instalado e pronto para uso, você pode criar seus estilos em styles.scss.
 
 ## Resolução do desafio
+Imagem da solução.
+Segue link do vercel ao lado para testar a ferramenta de jogo da velha.
+![image](https://user-images.githubusercontent.com/23459929/215487196-52034050-6952-430b-a558-07194394bcc6.png)
 
 
