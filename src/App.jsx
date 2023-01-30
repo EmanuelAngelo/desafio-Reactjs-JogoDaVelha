@@ -17,19 +17,19 @@ import "./styles.scss";
 */
 
 const winningCombinations = [
-  //horizontais
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
+  // horizontals
+  { indexes: [0, 1, 2], orientation: 'horizontal' },
+  { indexes: [3, 4, 5], orientation: 'horizontal' },
+  { indexes: [6, 7, 8], orientation: 'horizontal' },
 
-  // verticais
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
+  // verticals
+  { indexes: [0, 3, 6], orientation: 'vertical' },
+  { indexes: [1, 4, 7], orientation: 'vertical' },
+  { indexes: [0, 3, 6], orientation: 'vertical' },
 
-  // diagonal
-  [0, 4, 8],
-  [2, 4, 6],
+  // diagonals
+  { indexes: [0, 4, 8], orientation: 'diagonal-1' },
+  { indexes: [2, 4, 6], orientation: 'diagonal-2' },
 ];
 
 function App() {
@@ -38,89 +38,84 @@ function App() {
   const [winningCombo, setWinningCombo] = useState(null);
 
   const handleClick = (clickedIndex) => {
-    console.log(clickedIndex);
-
     if (gameData[clickedIndex] !== 0) {
       return;
     }
-    if(winningCombo){
+    if (winningCombo) {
       return;
     }
 
     setGameData((prev) => {
       const newGameData = [...prev];
       newGameData[clickedIndex] = turn;
+
       return newGameData;
     });
 
-    setTurn((prev) => (prev == 1 ? 2 : 1));
-
-    
+    setTurn((prev) => (prev === 1 ? 2 : 1));
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     checkWinner();
-    checkGameEnd();
-  },[gameData]);
+    checkGameEnded();
+  }, [gameData]);
 
-  useEffect(()=>{
-    if(winningCombo){
-      alert('Jogo teve um vencedor.')
+  useEffect(() => {
+    if (winningCombo) {
+      alert('jogo teve um vencedor.');
     }
-  },[winningCombo])
+  }, [winningCombo]);
 
-  const checkGameEnd = () => {
-    if(gameData.every((item) => item !==0)){
-      alert('jogo acabou, deu velha.');
+  const checkGameEnded = () => {
+    if (gameData.every((item) => item !== 0)) {
+      alert('jogo acabou, deu velha');
     }
-  }
+  };
 
   const checkWinner = () => {
-    console.log('checando ganhador!');
-    
     let winner = null;
 
-    for(let values of winningCombinations){
-
-      if(
-        gameData[values[0]] === 1 && 
-        gameData[values[1]] === 1 && 
-        gameData[values[2]] === 1 
-        ){
-          winner = 'player1'
-        }
-
-      if(
-        gameData[values[0]] === 2 && 
-        gameData[values[1]] === 2 && 
-        gameData[values[2]] === 2 
-        ){
-          winner = 'player2'
-        }
-        if (winner){
-          setWinningCombo(values);
-          break;
-        }
+    for (let combination of winningCombinations) {
+      const { indexes } = combination;
+      if (
+        gameData[indexes[0]] === 1 &&
+        gameData[indexes[1]] === 1 &&
+        gameData[indexes[2]] === 1
+      ) {
+        winner = 'player1';
+      }
+      if (
+        gameData[indexes[0]] === 2 &&
+        gameData[indexes[1]] === 2 &&
+        gameData[indexes[2]] === 2
+      ) {
+        winner = 'player2';
+      }
+      if (winner) {
+        setWinningCombo(combination);
+        break;
+      }
     }
-
-    console.log({winner});
-
   };
 
   return (
     <>
-      <div className="board-game">
+      <div className='board-game'>
         {gameData.map((value, index) => (
           <span
             onClick={() => {
               handleClick(index);
             }}
             key={index}
+            className={
+              winningCombo?.indexes.includes(index)
+                ? winningCombo.orientation
+                : undefined
+            }
           >
-            <abbr title="">{index}</abbr>
-            {value == 1 && "❌"}
-            {value == 2 && "⭕"}
-            {value == 0 && "❓"}
+            <abbr title=''>{index}</abbr>
+            {value === 1 && '❌'}
+            {value === 2 && '⭕️'}
           </span>
         ))}
       </div>
